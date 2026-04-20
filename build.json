@@ -1,0 +1,9 @@
+{
+  "build_from": {
+    "aarch64": "ghcr.io/home-assistant/aarch64-base-debian:trixie",
+    "amd64": "ghcr.io/home-assistant/amd64-base-debian:trixie"
+  },
+  "args": {
+    "PAPERCLIP_VERSION": "v2026.416.0"
+  }
+}

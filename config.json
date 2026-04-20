@@ -1,0 +1,102 @@
+{
+  "name": "Paperclip AI",
+  "version": "1.0.0",
+  "slug": "paperclip",
+  "description": "Multi-Agent Orchestration Platform for AI Agents - Full Debian Trixie Build",
+  "url": "https://github.com/paperclipai/paperclip",
+  "arch": ["aarch64", "amd64"],
+  "startup": "application",
+  "boot": "auto",
+  "init": false,
+  "full_access": false,
+  "host_network": false,
+  "host_pulseaudio": false,
+  "host_dbus": false,
+  "ports": {
+    "3100/tcp": 3100
+  },
+  "ports_description": {
+    "3100/tcp": "Paperclip Web UI & API"
+  },
+  "privileged": [],
+  "apparmor": "default",
+  "discovery": [],
+  "ingress": true,
+  "panel_icon": "mdi:robot-outline",
+  "map": ["share:rw"],
+  "services": ["mysql:want", "postgresql:want"],
+  "options": {
+    "log_level": "info",
+    "database": {
+      "type": "sqlite",
+      "sqlite_path": "/share/paperclip/paperclip.db",
+      "postgres_host": "your-postgres-host",
+      "postgres_port": 5432,
+      "postgres_user": "your-postgres-user",
+      "postgres_password": "",
+      "postgres_database": "paperclip"
+    },
+    "openclaw": {
+      "enabled": true,
+      "url": "http://your-openclaw-url:18790",
+      "api_key": ""
+    },
+    "deployment": {
+      "mode": "authenticated",
+      "exposure": "private"
+    },
+    "features": {
+      "enable_telemetry": false,
+      "enable_routines": true,
+      "enable_workspaces": true,
+      "enable_feedback": true
+    },
+    "performance": {
+      "max_concurrent_runs": 5,
+      "run_timeout_minutes": 60,
+      "heartbeat_interval_minutes": 30
+    },
+    "backup": {
+      "enabled": true,
+      "retention_days": 30,
+      "backup_path": "/share/paperclip/backups"
+    }
+  },
+  "schema": {
+    "log_level": "list(trace|debug|info|warning|error)",
+    "database": {
+      "type": "list(sqlite|postgres)",
+      "sqlite_path": "str",
+      "postgres_host": "str",
+      "postgres_port": "int",
+      "postgres_user": "str",
+      "postgres_password": "password",
+      "postgres_database": "str"
+    },
+    "openclaw": {
+      "enabled": "bool",
+      "url": "str",
+      "api_key": "password"
+    },
+    "deployment": {
+      "mode": "list(authenticated|public|local)",
+      "exposure": "list(private|public)"
+    },
+    "features": {
+      "enable_telemetry": "bool",
+      "enable_routines": "bool",
+      "enable_workspaces": "bool",
+      "enable_feedback": "bool"
+    },
+    "performance": {
+      "max_concurrent_runs": "int",
+      "run_timeout_minutes": "int",
+      "heartbeat_interval_minutes": "int"
+    },
+    "backup": {
+      "enabled": "bool",
+      "retention_days": "int",
+      "backup_path": "str"
+    }
+  }
+}
