@@ -1,109 +1,77 @@
 # Paperclip AI Home Assistant Add-on
 
-Home Assistant Add-on für Paperclip AI - Multi-Agent Orchestration Platform.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Add%20on-blue.svg)](https://www.home-assistant.io/)
+[![Platform](https://img.shields.io/badge/Platform-aarch64%20%7C%20amd64-green.svg)](https://github.com/chillkiller/paperclip-ha-addon)
+[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com/chillkiller/paperclip-ha-addon/releases)
 
-## Übersicht
+A complete Home Assistant add-on for [Paperclip AI](https://github.com/paperclipai/paperclip) - a powerful multi-agent orchestration platform for AI agents.
 
-Dies ist ein vollständiges Home Assistant Add-on, das Paperclip AI auf Debian Trixie Basis bereitstellt. Paperclip ist eine Open-Source-Plattform für die Orchestrierung von KI-Agenten.
+## 🌟 Features
 
-## Add-on Struktur
+- **Multi-Agent Orchestration**: Run and manage multiple AI agents in a unified platform
+- **Full Debian Trixie Build**: Optimized container based on Debian Trixie
+- **Multiple Database Support**: SQLite (default) or PostgreSQL for production
+- **OpenClaw Integration**: Seamless integration with OpenClaw for advanced AI capabilities
+- **Web UI & API**: Built-in web interface accessible on port 3100
+- **Flexible Deployment**: Support for authenticated, public, or local deployment modes
+- **Performance Tuning**: Configurable concurrency, timeouts, and heartbeat intervals
+- **Backup Support**: Automated database backups with configurable retention
+- **Home Assistant Native**: Full integration with Home Assistant services and configuration
 
-Dieses Add-on folgt der Standard-Home Assistant Add-on Struktur:
+## 📋 Prerequisites
 
-```
-paperclip-ha-addon/
-├── config.json          # Add-on Manifest (UI-Konfiguration)
-├── Dockerfile           # Container-Definition (Debian Trixie)
-├── run.sh              # Entrypoint-Script (bashio-basiert)
-├── build.json          # Build-Konfiguration
-└── README.md           # Dokumentation
-```
+- Home Assistant OS or Supervised
+- Minimum 2 GB RAM (4 GB recommended)
+- 10 GB free storage space
+- Architecture: aarch64 or amd64
 
-## Installation
+## 🚀 Installation
 
-### Voraussetzungen
+### Step 1: Add Repository
 
-- Home Assistant OS oder Supervised
-- Mindestens 2 GB RAM (4 GB empfohlen)
-- 10 GB freier Speicherplatz
-- Architektur: aarch64 oder amd64
+1. Open Home Assistant
+2. Go to **Settings** → **Add-ons** → **Add-on Store**
+3. Click the three dots menu → **Add repository**
+4. Enter: `https://github.com/chillkiller/paperclip-ha-addon`
+5. Click **Add**
 
-### Schritte
+### Step 2: Install Add-on
 
-1. **Repository hinzufügen**
-   
-   Füge dieses Repository zu Home Assistant hinzu:
-   ```
-   https://github.com/chillkiller/paperclip-ha-addon
-   ```
+1. In the Add-on Store, find **Paperclip AI**
+2. Click **Install**
+3. Wait for the installation to complete
 
-2. **Add-on installieren**
-   
-   Öffne Home Assistant → Einstellungen → Add-ons → Add-on Store → Installiere "Paperclip AI"
+### Step 3: Configure
 
-3. **Konfigurieren**
-   
-   Klicke auf "Paperclip AI" → Konfiguration und passe die Einstellungen an
+1. Click **Paperclip AI** → **Configuration**
+2. Adjust settings as needed (see [Configuration](#configuration) below)
+3. Click **Save**
 
-4. **Starten**
-   
-   Klicke auf "Starten"
+### Step 4: Start
 
-5. **Web UI öffnen**
-   
-   Öffne `http://<home-assistant-ip>:3100` im Browser
+1. Click **Start**
+2. Wait for the add-on to initialize
+3. Click **Open Web UI** or navigate to `http://<home-assistant-ip>:3100`
 
-## Konfiguration
+## ⚙️ Configuration
 
-### Add-on Manifest (config.json)
+### Basic Configuration
 
-Das Add-on Manifest definiert alle verfügbaren Konfigurationsoptionen, die in der Home Assistant UI angezeigt werden.
-
-#### Struktur
-
-```json
-{
-  "name": "Paperclip AI",
-  "version": "1.0.0",
-  "slug": "paperclip",
-  "arch": ["aarch64", "amd64"],
-  "ports": {
-    "3100/tcp": 3100
-  },
-  "map": ["share:rw"],
-  "services": ["mysql:want", "postgresql:want"],
-  "options": { ... },
-  "schema": { ... }
-}
-```
-
-#### Wichtige Felder
-
-- **slug**: Eindeutiger Bezeichner für das Add-on
-- **arch**: Unterstützte Architekturen
-- **ports**: Exponierte Ports
-- **map**: Gemountete Verzeichnisse (share:rw für Daten)
-- **services**: Optionale Home Assistant Services (PostgreSQL)
-- **options**: Standardwerte für Konfiguration
-- **schema**: Validierung und Typen für Konfigurationsfelder
-
-### Konfigurationsoptionen
-
-#### Log Level
 ```yaml
 log_level: info  # trace, debug, info, warning, error
 ```
 
-#### Datenbank-Konfiguration
+### Database Configuration
 
-**SQLite (Standard)**
+**SQLite (Default)**
 ```yaml
 database:
   type: sqlite
   sqlite_path: /share/paperclip/paperclip.db
 ```
 
-**PostgreSQL (Empfohlen für Produktion)**
+**PostgreSQL (Recommended for Production)**
 ```yaml
 database:
   type: postgres
@@ -115,9 +83,11 @@ database:
 ```
 
 **PostgreSQL via Home Assistant Service**
-Wenn der PostgreSQL-Add-on in Home Assistant installiert ist, kann das Paperclip Add-on automatisch darauf zugreifen. Die manuelle Konfiguration hat Priorität.
 
-#### OpenClaw Integration
+If you have the PostgreSQL add-on installed in Home Assistant, Paperclip can automatically connect to it. Manual configuration takes priority.
+
+### OpenClaw Integration
+
 ```yaml
 openclaw:
   enabled: true
@@ -125,18 +95,20 @@ openclaw:
   api_key: your_api_key_here
 ```
 
-#### Deployment-Modus
+### Deployment Mode
+
 ```yaml
 deployment:
   mode: authenticated  # authenticated | public | local
   exposure: private   # private | public
 ```
 
-- **authenticated**: Erfordert Authentifizierung (Standard)
-- **public**: Öffentlicher Zugriff ohne Authentifizierung
-- **local**: Nur lokaler Zugriff
+- **authenticated**: Requires authentication (default)
+- **public**: Public access without authentication
+- **local**: Local access only
 
-#### Features
+### Features
+
 ```yaml
 features:
   enable_telemetry: false
@@ -145,7 +117,8 @@ features:
   enable_feedback: true
 ```
 
-#### Performance-Tuning
+### Performance Tuning
+
 ```yaml
 performance:
   max_concurrent_runs: 5
@@ -153,7 +126,8 @@ performance:
   heartbeat_interval_minutes: 30
 ```
 
-#### Backup-Konfiguration
+### Backup Configuration
+
 ```yaml
 backup:
   enabled: true
@@ -161,163 +135,168 @@ backup:
   backup_path: /share/paperclip/backups
 ```
 
-## Dockerfile (Debian Trixie)
+## 🏗️ Architecture
 
-### Layer-Struktur
+### Add-on Structure
 
-Das Dockerfile ist in optimierte Layer unterteilt:
+```
+paperclip-ha-addon/
+├── repository.yaml              # Repository manifest
+├── README.md                    # This file
+├── LICENSE                      # MIT License
+├── SECURITY.md                  # Security policy
+├── CONTRIBUTING.md              # Contribution guidelines
+├── CODE_OF_CONDUCT.md           # Code of conduct
+└── paperclip_ha_addon/          # Add-on directory
+    ├── config.json              # Add-on manifest
+    ├── build.json               # Build configuration
+    ├── Dockerfile               # Container definition
+    ├── run.sh                   # Entrypoint script
+    └── HA-COMPATIBILITY-REVIEW.md  # Compatibility review
+```
+
+### Dockerfile Layers
+
+The Dockerfile is optimized with minimal layers:
 
 1. **System Dependencies**: ca-certificates, curl, gosu, git, wget, ripgrep, python3, openssh-client, jq, tzdata
-2. **Node.js und pnpm**: Node.js LTS mit corepack/pnpm
-3. **User Setup**: paperclip Benutzer und Verzeichnisse
-4. **Paperclip Build**: Vollständiger Build aus Source (v2026.416.0)
-5. **Installation**: Kopieren nach /app
+2. **Node.js and pnpm**: Node.js LTS with corepack/pnpm
+3. **User Setup**: paperclip user and directories
+4. **Paperclip Build**: Full build from source (v2026.416.0)
+5. **Installation**: Copy to /app
 6. **Global CLI Tools**: claude-code, codex, opencode-ai
-7. **Entrypoint**: run.sh Script
-8. **Environment**: Produktions-Environment-Variablen
-9. **Permissions**: Rechte-Zuweisung
-10. **Health Check**: /health Endpoint
+7. **Entrypoint**: run.sh script
+8. **Environment**: Production environment variables
+9. **Permissions**: Rights assignment
+10. **Health Check**: /health endpoint
 11. **Port Expose**: 3100
 12. **Entrypoint**: /usr/local/bin/run.sh
 
-### Optimierungen
+### run.sh Phases
 
-- **Minimale Layer**: Reduziert Image-Größe
-- **Cache-Friendly**: Unveränderliche Layer zuerst
-- **Clean-up**: apt-get clean und rm -rf /var/lib/apt/lists/*
-- **User Switch**: Sicherheit durch Nicht-Root-Benutzer
+The entrypoint script is divided into 7 phases:
 
-## run.sh (Entrypoint-Script)
+1. **Configuration Load & Validation**: Load all options via bashio, validate PostgreSQL config
+2. **Environment Setup**: Create directories and set permissions
+3. **Paperclip Configuration Generation**: Generate config.json from HA options
+4. **Environment Variable Export**: Export all Paperclip environment variables
+5. **Startup Information**: Output configuration summary
+6. **Health Check Setup**: Create health check files
+7. **Start Paperclip**: Start the Paperclip server with signal handling
 
-### Phasen
-
-Das run.sh Script ist in 7 Phasen unterteilt:
-
-#### Phase 1: Konfigurations-Ladung und -Validierung
-- Laden aller Konfigurationsoptionen via bashio
-- Validierung von PostgreSQL-Konfiguration
-- Service-Discovery für Home Assistant PostgreSQL
-
-#### Phase 2: Environment-Setup
-- Erstellung aller notwendigen Verzeichnisse
-- Setzen von Berechtigungen
-
-#### Phase 3: Paperclip-Konfigurations-Generierung
-- Generierung von config.json aus HA-Options
-- Validierung der generierten Konfiguration
-
-#### Phase 4: Environment-Variable-Export
-- Export aller Paperclip-Environment-Variablen
-- Telemetrie-Deaktivierung wenn gewünscht
-
-#### Phase 5: Startup-Informationen
-- Ausgabe der Konfigurations-Zusammenfassung
-- Logging aller wichtigen Parameter
-
-#### Phase 6: Health-Check-Setup
-- Erstellung von Health-Check-Dateien
-- Initialer Status-Set
-
-#### Phase 7: Start von Paperclip
-- Start des Paperclip-Servers
-- Signal-Handling via exec
-
-### bashio Integration
-
-Das Script verwendet die Home Assistant bashio Bibliothek:
-
-- `bashio::config 'key'`: Lesen von Konfigurationsoptionen
-- `bashio::log.info "message"`: Logging
-- `bashio::services.available "service"`: Service-Discovery
-- `bashio::services "service" "key"`: Service-Konfiguration lesen
-
-## Ports
-
-- **3100/tcp**: Paperclip Web UI & API
-
-## Verzeichnisstruktur
+## 📁 Directory Structure
 
 ```
 /share/paperclip/
-├── paperclip.db          # SQLite Datenbank (falls verwendet)
-├── backups/              # Backup-Dateien
-├── logs/                 # Log-Dateien
-├── temp/                 # Temporäre Dateien
-├── uploads/              # Upload-Dateien
-└── health/               # Health-Check-Status
+├── paperclip.db          # SQLite database (if used)
+├── backups/              # Backup files
+├── logs/                 # Log files
+├── temp/                 # Temporary files
+├── uploads/              # Upload files
+└── health/               # Health check status
     ├── status            # running | starting | stopped
-    └── start_time        # Unix-Timestamp
+    └── start_time        # Unix timestamp
 ```
 
-## Fehlersuche
+## 🔧 Troubleshooting
 
-### Add-on startet nicht
+### Add-on Won't Start
 
-1. **Logs prüfen**
-   - Home Assistant → Einstellungen → Add-ons → Paperclip AI → Logs
+1. **Check Logs**
+   - Home Assistant → Settings → Add-ons → Paperclip AI → Logs
 
-2. **Speicherplatz prüfen**
-   - Mindestens 10 GB freier Speicherplatz erforderlich
+2. **Check Storage**
+   - Ensure at least 10 GB free space
 
-3. **Datenbank-Verbindung prüfen**
-   - Bei PostgreSQL: Host, Port, User, Password korrekt?
-   - Bei SQLite: Schreibrechte auf /share/paperclip/?
+3. **Check Database Connection**
+   - For PostgreSQL: Verify host, port, user, password
+   - For SQLite: Verify write permissions on `/share/paperclip/`
 
-### Web UI nicht erreichbar
+### Web UI Not Accessible
 
-1. **Port prüfen**
-   - Port 3100 nicht blockiert?
-   - Firewall-Einstellungen korrekt?
+1. **Check Port**
+   - Ensure port 3100 is not blocked
+   - Verify firewall settings
 
-2. **Add-on Status prüfen**
-   - Läuft das Add-on?
-   - Keine Fehler im Log?
+2. **Check Add-on Status**
+   - Is the add-on running?
+   - Any errors in the log?
 
-### Datenbank-Probleme
+### Database Issues
 
 **SQLite**
-- Prüfe Schreibrechte auf `/share/paperclip/`
-- Stelle sicher, dass das Verzeichnis existiert
+- Check write permissions on `/share/paperclip/`
+- Ensure the directory exists
 
 **PostgreSQL**
-- Verifiziere Verbindungseinstellungen
-- Prüfe PostgreSQL-Logs
-- Teste Verbindung mit `psql`
+- Verify connection settings
+- Check PostgreSQL logs
+- Test connection with `psql`
 
-## Updates
+## 🔄 Updates
 
-Das Add-on wird automatisch aktualisiert, wenn eine neue Version verfügbar ist. Paperclip selbst wird über den Build-Prozess aktualisiert.
+The add-on updates automatically when a new version is available. Paperclip itself is updated through the build process.
 
-## Sicherheit
+## 🔒 Security
 
-- **Telemetrie**: Standardmäßig deaktiviert
-- **Passwörter**: Sicher in HA-Konfiguration gespeichert
-- **API-Keys**: Als password-Felder behandelt
-- **Deployment**: authenticated-Modus erfordert Authentifizierung
-- **User**: Läuft als Nicht-Root-Benutzer (paperclip)
+- **Telemetry**: Disabled by default
+- **Passwords**: Securely stored in Home Assistant configuration
+- **API Keys**: Treated as password fields
+- **Deployment**: Authenticated mode requires authentication
+- **User**: Runs as non-root user (paperclip)
 
-## Credits
+See [SECURITY.md](SECURITY.md) for detailed security information.
 
-- **Paperclip AI**: https://github.com/paperclipai/paperclip
-- **OpenClaw Integration**: Forge (coding-main agent)
-- **Debian Trixie Port**: GaRoN
+## 📚 Documentation
 
-## Lizenz
+- [Paperclip Documentation](https://paperclipai-paperclip.mintlify.app/)
+- [Home Assistant Add-on Documentation](https://developers.home-assistant.io/docs/add-ons/)
+- [OpenClaw Documentation](https://github.com/openclaw/openclaw)
 
-Dieses Add-on steht unter der MIT License. Paperclip AI steht unter seiner eigenen Lizenz.
+## 🤝 Contributing
 
-## Support
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-Für Probleme und Fragen:
+## 📄 License
 
-1. **Logs prüfen**: Home Assistant Add-on Panel
-2. **Dokumentation**: https://paperclipai-paperclip.mintlify.app/
+This add-on is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+Paperclip AI is licensed under its own license.
+
+## 🆘 Support
+
+For issues and questions:
+
+1. **Check Logs**: Home Assistant Add-on panel
+2. **Documentation**: https://paperclipai-paperclip.mintlify.app/
 3. **GitHub Issues**: https://github.com/chillkiller/paperclip-ha-addon/issues
 
-## Version
+## 📊 Version Information
 
 - **Add-on Version**: 1.0.0
 - **Paperclip Version**: v2026.416.0
 - **Base Image**: Debian Trixie
 - **Node.js**: LTS
-- **Architekturen**: aarch64, amd64
+- **Architectures**: aarch64, amd64
+
+## 👥 Credits
+
+- **Paperclip AI**: https://github.com/paperclipai/paperclip
+- **OpenClaw Integration**: Forge (coding-main agent)
+- **Debian Trixie Port**: GaRoN
+
+## 📢 Changelog
+
+### Version 1.0.0
+
+- Initial release
+- Full Debian Trixie build
+- SQLite and PostgreSQL support
+- OpenClaw integration
+- Web UI and API
+- Backup support
+- Performance tuning options
+
+---
+
+Made with ❤️ by the Home Assistant community

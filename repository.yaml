@@ -1,0 +1,5 @@
+name: Paperclip AI Add-on Repository
+slug: paperclip-ha-addon
+description: Home Assistant Add-on for Paperclip AI - Multi-Agent Orchestration Platform
+url: https://github.com/chillkiller/paperclip-ha-addon
+maintainer: GaRoN
