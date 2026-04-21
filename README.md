@@ -255,7 +255,7 @@ See [SECURITY.md](SECURITY.md) for detailed security information.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions from the community are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📄 License
 
@@ -299,4 +299,6 @@ For issues and questions:
 
 ---
 
-Made with ❤️ by the Home Assistant community
+**Created and maintained by [GaRoN ChillKiller](https://github.com/chillkiller)**
+
+Made with ❤️ by GaRoN ChillKiller

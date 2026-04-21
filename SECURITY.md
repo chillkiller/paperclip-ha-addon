@@ -75,4 +75,4 @@ This add-on has been reviewed for Home Assistant compatibility and security best
 
 ---
 
-For questions about security, please open an issue: https://github.com/chillkiller/paperclip-ha-addon/issues
+For questions about security, please contact [GaRoN ChillKiller](https://github.com/chillkiller): https://github.com/chillkiller/paperclip-ha-addon/issues
