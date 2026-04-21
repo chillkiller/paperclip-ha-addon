@@ -12,7 +12,8 @@ If you discover a security vulnerability, please report it privately to avoid pu
 
 **How to Report:**
 
-1. Send an email to: garon@example.com
+1. Open a private security advisory on GitHub:
+   https://github.com/chillkiller/paperclip-ha-addon/security/advisories/new
 2. Include:
    - Description of the vulnerability
    - Steps to reproduce
@@ -74,4 +75,4 @@ This add-on has been reviewed for Home Assistant compatibility and security best
 
 ---
 
-For questions about security, please contact: garon@example.com
+For questions about security, please open an issue: https://github.com/chillkiller/paperclip-ha-addon/issues
