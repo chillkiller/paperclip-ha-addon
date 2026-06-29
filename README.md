@@ -294,7 +294,7 @@ For issues and questions:
 ## 📊 Version Information
 
 - **Add-on Version**: 1.0.0
-- **Paperclip Version**: v2026.416.0
+- **Paperclip Version**: v2026.428.0
 - **Base Image**: Debian Trixie
 - **Node.js**: LTS
 - **Architectures**: aarch64, amd64
