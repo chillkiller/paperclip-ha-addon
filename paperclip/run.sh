@@ -21,6 +21,7 @@ bashio::log.info "=========================================="
 # ============================================================================
 cleanup() {
     bashio::log.info "Shutting down Paperclip gracefully..."
+    echo "stopped" > /share/paperclip/health/status
     # Give Paperclip time to close connections and save state
     sleep 2
     bashio::log.info "Paperclip shutdown complete"
@@ -253,6 +254,35 @@ bashio::log.info "Phase 6: Starting Paperclip server..."
 
 cd /app
 
+# Create health check endpoint directory
+mkdir -p /share/paperclip/health
+
+echo "starting" > /share/paperclip/health/status
+echo "$(date +%s)" > /share/paperclip/health/start_time
+
 # Start Paperclip with proper signal handling
 # Using exec to ensure PID 1 and proper signal propagation
-exec node --import ./server/node_modules/tsx/dist/loader.mjs server/dist/index.js
+exec node --import ./server/node_modules/tsx/dist/loader.mjs server/dist/index.js &
+
+PAPERCLIP_PID=$!
+
+# Wait for Paperclip to start
+bashio::log.info "Waiting for Paperclip to start..."
+
+# Wait up to 60 seconds for startup
+for i in {1..60}; do
+    if curl -f http://localhost:3100/health > /dev/null 2>&1; then
+        bashio::log.info "Paperclip started successfully!"
+        echo "running" > /share/paperclip/health/status
+        break
+    fi
+    if [ $i -eq 60 ]; then
+        bashio::log.error "Paperclip failed to start within 60 seconds"
+        echo "failed" > /share/paperclip/health/status
+        exit 1
+    fi
+    sleep 1
+done
+
+# Wait for Paperclip process
+wait $PAPERCLIP_PID

@@ -107,6 +107,22 @@ deployment:
 - **public**: Public access without authentication
 - **local**: Local access only
 
+⚠️ **SECURITY WARNING - Public Mode:**
+
+When using `deployment.mode: public` or `deployment.exposure: public`, the add-on is accessible without authentication. This introduces significant security risks:
+
+- **XSS (Cross-Site Scripting):** Malicious actors could inject scripts through the web UI
+- **CSRF (Cross-Site Request Forgery):** Unauthorized actions could be triggered from other sites
+- **Data Exposure:** All data, including API keys and configurations, could be accessed
+- **Unauthorized Access:** Anyone with network access can control the add-on
+
+**Recommendations for Public Mode:**
+- Use only in isolated networks (e.g., VLANs, VPNs)
+- Implement reverse proxy with authentication (e.g., Authelia, OAuth2 Proxy)
+- Restrict access via firewall rules
+- Monitor logs for suspicious activity
+- Consider using `mode: authenticated` with proper user management instead
+
 ### Features
 
 ```yaml
@@ -149,9 +165,10 @@ paperclip-ha-addon/
 ├── CODE_OF_CONDUCT.md           # Code of conduct
 └── paperclip_ha_addon/          # Add-on directory
     ├── config.json              # Add-on manifest
-    ├── build.json               # Build configuration
     ├── Dockerfile               # Container definition
     ├── run.sh                   # Entrypoint script
+    ├── healthcheck.sh           # Health check script
+    ├── apparmor.txt             # AppArmor security profile
     └── HA-COMPATIBILITY-REVIEW.md  # Compatibility review
 ```
 
@@ -159,30 +176,28 @@ paperclip-ha-addon/
 
 The Dockerfile is optimized with minimal layers:
 
-1. **System Dependencies**: ca-certificates, curl, gosu, git, wget, ripgrep, python3, openssh-client, jq, tzdata
+1. **System Dependencies**: ca-certificates, curl, su-exec, git, wget, ripgrep, python3, openssh-client, jq, tzdata
 2. **Node.js and pnpm**: Node.js LTS with corepack/pnpm
 3. **User Setup**: paperclip user and directories
 4. **Paperclip Build**: Full build from source (v2026.416.0)
 5. **Installation**: Copy to /app
-6. **Global CLI Tools**: claude-code, codex, opencode-ai
+6. **Health Check**: Built-in health monitoring on port 3100
 7. **Entrypoint**: run.sh script
 8. **Environment**: Production environment variables
 9. **Permissions**: Rights assignment
-10. **Health Check**: /health endpoint
-11. **Port Expose**: 3100
-12. **Entrypoint**: /usr/local/bin/run.sh
+10. **Port Expose**: 3100
+11. **Entrypoint**: /usr/local/bin/run.sh
 
 ### run.sh Phases
 
-The entrypoint script is divided into 7 phases:
+The entrypoint script is divided into 6 phases:
 
 1. **Configuration Load & Validation**: Load all options via bashio, validate PostgreSQL config
 2. **Environment Setup**: Create directories and set permissions
 3. **Paperclip Configuration Generation**: Generate config.json from HA options
 4. **Environment Variable Export**: Export all Paperclip environment variables
 5. **Startup Information**: Output configuration summary
-6. **Health Check Setup**: Create health check files
-7. **Start Paperclip**: Start the Paperclip server with signal handling
+6. **Start Paperclip**: Start the Paperclip server with signal handling
 
 ## 📁 Directory Structure
 
@@ -244,6 +259,11 @@ The add-on updates automatically when a new version is available. Paperclip itse
 - **API Keys**: Treated as password fields
 - **Deployment**: Authenticated mode requires authentication
 - **User**: Runs as non-root user (paperclip)
+- **Network**: Does not use host network
+- **AppArmor**: Uses default AppArmor profile
+- **Health Monitoring**: Built-in health check endpoint
+- **Backup Exclusions**: Temporary files and logs excluded from backups
+- **Image Signing**: Codenotary CAS signature verification enabled
 
 See [SECURITY.md](SECURITY.md) for detailed security information.
 

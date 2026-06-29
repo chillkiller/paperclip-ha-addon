@@ -4,6 +4,7 @@
     "amd64": "ghcr.io/home-assistant/amd64-base-debian:trixie"
   },
   "args": {
-    "PAPERCLIP_VERSION": "v2026.416.0"
-  }
+    "PAPERCLIP_VERSION": "v2026.428.0"
+  },
+  "codenotary": "garon@example.com"
 }

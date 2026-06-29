@@ -44,6 +44,30 @@ We aim to respond within 48 hours and provide a fix within 7 days for critical v
 
 ## Known Security Considerations
 
+### Deployment Mode Security
+
+**Public Mode Risks:**
+
+When `deployment.mode: public` or `deployment.exposure: public` is enabled, the add-on is accessible without authentication. This introduces significant security risks:
+
+- **XSS (Cross-Site Scripting):** Malicious actors could inject scripts through the web UI
+- **CSRF (Cross-Site Request Forgery):** Unauthorized actions could be triggered from other sites
+- **Data Exposure:** All data, including API keys and configurations, could be accessed
+- **Unauthorized Access:** Anyone with network access can control the add-on
+
+**Mitigation Strategies:**
+- Use only in isolated networks (e.g., VLANs, VPNs)
+- Implement reverse proxy with authentication (e.g., Authelia, OAuth2 Proxy)
+- Restrict access via firewall rules
+- Monitor logs for suspicious activity
+- Consider using `mode: authenticated` with proper user management instead
+
+**Authenticated Mode:**
+- Default and recommended mode
+- Requires authentication for all access
+- Reduces XSS/CSRF attack surface
+- Still requires proper network isolation
+
 ### Database Security
 
 - SQLite databases are stored in `/share/paperclip/` with read/write access

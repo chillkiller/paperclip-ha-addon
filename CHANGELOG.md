@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Custom AppArmor profile for enhanced security
+- Health check script with status tracking
+- Translation support (English)
+- Comprehensive documentation (DOCS.md)
+- Asset guidelines (ASSETS.md)
+- SQLite3 and libsqlite3-dev for database support
+- Web UI URL configuration
+- Health status tracking in `/share/paperclip/health/`
+
+### Changed
+- Fixed BUILD_FROM argument for Supervisor 2026.04.0+ compatibility
+- Enhanced startup sequence with health monitoring
+- Improved signal handling for graceful shutdown
+- Updated health check start period to 60s
+
+### Security
+- Added custom AppArmor profile
+- Enhanced health check with process verification
+- Improved startup validation
+
 ## [1.0.0] - 2026-04-21
 
 ### Added
@@ -40,3 +63,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feature flags (telemetry, routines, workspaces, feedback)
 - Performance settings (max concurrent runs, timeout, heartbeat interval)
 - Backup configuration (enabled, retention days, backup path)
+
+### Security
+- Non-root user execution (paperclip user)
+- AppArmor enabled (default profile)
+- No host network
+- No full access
+- No privileged access
+- Health monitoring via watchdog
+- Backup exclusions for sensitive data
+- Image signing configuration (Codenotary)
+
+### Documentation
+- Comprehensive README with installation and configuration
+- Security policy
+- Contributing guidelines
+- Code of conduct
+- License information
+
+### Dockerfile
+- Multi-stage build for optimization
+- Minimal system dependencies
+- Node.js LTS with pnpm
+- Health check endpoint
+- Proper user permissions
+- Security labels
+
+### Build Configuration
+- Support for aarch64 and amd64
+- Pinned Paperclip version (v2026.416.0)
+- Codenotary image signing
+
+### Repository
+- Repository manifest for Home Assistant Add-on Store
+- Maintainer contact information
+- Project description and URL
+
+## [0.1.0] - 2026-04-20
+
+### Added
+- Initial project structure
+- Basic Dockerfile
+- Configuration files
+- Repository manifest
+
+---
+
+[Unreleased]: https://github.com/chillkiller/paperclip-ha-addon/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/chillkiller/paperclip-ha-addon/releases/tag/v1.0.0
+[0.1.0]: https://github.com/chillkiller/paperclip-ha-addon/releases/tag/v0.1.0

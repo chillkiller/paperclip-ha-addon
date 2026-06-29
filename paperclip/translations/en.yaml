@@ -1,0 +1,110 @@
+configuration:
+  log_level:
+    name: Log Level
+    description: The log level for the add-on.
+    options:
+      trace: Trace
+      debug: Debug
+      info: Info
+      warning: Warning
+      error: Error
+  database:
+    name: Database Configuration
+    description: Configure the database backend for Paperclip.
+    fields:
+      type:
+        name: Database Type
+        description: The type of database to use.
+        options:
+          sqlite: SQLite
+          postgres: PostgreSQL
+      sqlite_path:
+        name: SQLite Path
+        description: The path to the SQLite database file.
+      postgres_host:
+        name: PostgreSQL Host
+        description: The hostname or IP address of the PostgreSQL server.
+      postgres_port:
+        name: PostgreSQL Port
+        description: The port number of the PostgreSQL server.
+      postgres_user:
+        name: PostgreSQL User
+        description: The username for PostgreSQL authentication.
+      postgres_password:
+        name: PostgreSQL Password
+        description: The password for PostgreSQL authentication.
+      postgres_database:
+        name: PostgreSQL Database
+        description: The name of the PostgreSQL database.
+  openclaw:
+    name: OpenClaw Integration
+    description: Configure OpenClaw integration for advanced AI capabilities.
+    fields:
+      enabled:
+        name: Enable OpenClaw
+        description: Enable or disable OpenClaw integration.
+      url:
+        name: OpenClaw URL
+        description: The URL of the OpenClaw server.
+      api_key:
+        name: OpenClaw API Key
+        description: The API key for OpenClaw authentication.
+  deployment:
+    name: Deployment Configuration
+    description: Configure how Paperclip is deployed.
+    fields:
+      mode:
+        name: Deployment Mode
+        description: The authentication mode for the deployment.
+        options:
+          authenticated: Authenticated
+          public: Public
+          local: Local
+      exposure:
+        name: Exposure
+        description: The network exposure level.
+        options:
+          private: Private
+          public: Public
+  features:
+    name: Features
+    description: Configure optional features.
+    fields:
+      enable_telemetry:
+        name: Enable Telemetry
+        description: Enable anonymous usage telemetry.
+      enable_routines:
+        name: Enable Routines
+        description: Enable routine automation features.
+      enable_workspaces:
+        name: Enable Workspaces
+        description: Enable workspace management.
+      enable_feedback:
+        name: Enable Feedback
+        description: Enable user feedback collection.
+  performance:
+    name: Performance
+    description: Configure performance settings.
+    fields:
+      max_concurrent_runs:
+        name: Max Concurrent Runs
+        description: Maximum number of concurrent agent runs.
+      run_timeout_minutes:
+        name: Run Timeout
+        description: Maximum time in minutes for a single run.
+      heartbeat_interval_minutes:
+        name: Heartbeat Interval
+        description: Interval in minutes between heartbeat checks.
+  backup:
+    name: Backup Configuration
+    description: Configure automated backups.
+    fields:
+      enabled:
+        name: Enable Backups
+        description: Enable automated database backups.
+      retention_days:
+        name: Retention Days
+        description: Number of days to keep backups.
+      backup_path:
+        name: Backup Path
+        description: The path where backups are stored.

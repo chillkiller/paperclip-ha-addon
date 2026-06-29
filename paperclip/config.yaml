@@ -12,6 +12,15 @@
   "host_network": false,
   "host_pulseaudio": false,
   "host_dbus": false,
+  "stage": "stable",
+  "timeout": 10,
+  "watchdog": "http://[HOST]:[PORT:3100]/health",
+  "webui": "http://[HOST]:[PORT:3100]/",
+  "backup_exclude": [
+    "share/paperclip/temp/*",
+    "share/paperclip/logs/*.log",
+    "share/paperclip/.cache/*"
+  ],
   "ports": {
     "3100/tcp": 3100
   },

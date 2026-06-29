@@ -1,4 +1,7 @@
-ARG BUILD_FROM
+# ============================================================================
+# Base Image - Explicitly pinned for stability (Supervisor 2026.04.0+)
+# ============================================================================
+ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base-debian:trixie-2026.04.0
 FROM ${BUILD_FROM}
 
 # ============================================================================
@@ -9,16 +12,18 @@ LABEL \
     io.hass.description="Multi-Agent Orchestration Platform" \
     io.hass.type="addon" \
     io.hass.version="1.0.0" \
-    maintainer="GaRoN <garon@example.com>"
+    io.hass.arch="aarch64|amd64" \
+    maintainer="GaRoN <garon@example.com>" \
+    io.hass.apparmor="default"
 
 # ============================================================================
-# Layer 1: System Dependencies (Minimal)
+# Layer 1: System Dependencies (Minimal & Optimized)
 # ============================================================================
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
-        gosu \
+        su-exec \
         git \
         wget \
         ripgrep \
@@ -26,6 +31,8 @@ RUN apt-get update && \
         openssh-client \
         jq \
         tzdata \
+        sqlite3 \
+        libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -51,7 +58,7 @@ RUN useradd -m -s /bin/bash paperclip && \
 # ============================================================================
 # Layer 4: Paperclip Build
 # ============================================================================
-ARG PAPERCLIP_VERSION=v2026.416.0
+ARG PAPERCLIP_VERSION=v2026.428.0
 WORKDIR /tmp/paperclip-build
 
 RUN git clone --depth 1 --branch ${PAPERCLIP_VERSION} https://github.com/paperclipai/paperclip.git . && \
@@ -70,18 +77,17 @@ RUN cp -r /tmp/paperclip-build/* /app/ && \
 WORKDIR /app
 
 # ============================================================================
-# Layer 6: Global CLI Tools
+# Layer 6: Health Check
 # ============================================================================
-RUN npm install --global --omit=dev \
-    @anthropic-ai/claude-code@latest \
-    @openai/codex@latest \
-    opencode-ai
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD /usr/local/bin/healthcheck.sh || exit 1
 
 # ============================================================================
-# Layer 7: Entrypoint Script
+# Layer 7: Entrypoint and Health Check Scripts
 # ============================================================================
 COPY run.sh /usr/local/bin/run.sh
-RUN chmod +x /usr/local/bin/run.sh
+COPY healthcheck.sh /usr/local/bin/healthcheck.sh
+RUN chmod +x /usr/local/bin/run.sh /usr/local/bin/healthcheck.sh
 
 # ============================================================================
 # Environment Variables
@@ -114,3 +120,9 @@ EXPOSE 3100
 # Entrypoint
 # ============================================================================
 CMD ["/usr/local/bin/run.sh"]
+
+# ============================================================================
+# Health Check Endpoint
+# ============================================================================
+# The application should provide a /health endpoint on port 3100
+# This allows the Supervisor to monitor the add-on's health status
